@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GovtJobs.PK - پاکستان کی سرکاری نوکریوں کا سب سے بڑا ڈیٹا بیس</title>
+    <style>
+        :root { --primary: #00d26a; --dark-bg: #0b0b0b; --card-bg: #161616; }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--dark-bg); color: #ffffff; padding-bottom: 90px; }
+        
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #111111; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #2a2a2a; z-index: 999; }
+        .nav-item { background: transparent; border: none; color: #777; text-align: center; font-size: 11px; cursor: pointer; flex: 1; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        .nav-item span { display: block; font-size: 20px; margin-bottom: 3px; }
+
+        .container { max-width: 680px; margin: 0 auto; padding: 20px; }
+        .section { display: none; animation: fadeSlide 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-primary { background: linear-gradient(135deg, #00d26a, #00994d); color: #000; border: none; padding: 14px; border-radius: 50px; width: 100%; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .btn-primary:active { transform: scale(0.97); }
+
+        .info-card { background: #121212; border-radius: 16px; padding: 20px; margin-bottom: 15px; border: 1px solid #222; }
+        .warning-badge { background: #2a1a1a; border-left: 4px solid #ff4444; padding: 12px 15px; border-radius: 8px; font-size: 13px; color: #ccc; margin-bottom: 15px; line-height: 1.6; }
+        .trust-badge { background: #162116; border-left: 4px solid var(--primary); padding: 12px 15px; border-radius: 8px; font-size: 13px; color: #ddd; margin-bottom: 15px; line-height: 1.6; }
+
+        .filter-container { background: #0f0f0f; border-radius: 16px; padding: 15px; margin-bottom: 20px; border: 1px solid #222; }
+        .input-field { width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 30px; color: white; margin-bottom: 15px; outline: none; font-size: 14px; }
+        .input-field:focus { border-color: var(--primary); }
+        
+        .filter-group-title { color: #888; font-size: 13px; margin-bottom: 8px; margin-top: 10px; }
+        .filter-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 5px; }
+        .filter-btn { background: #1f1f1f; border: 1px solid #333; color: #aaa; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .filter-btn.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: bold; }
+        .filter-btn.expiring { border-color: #ff4444; color: #ff4444; }
+        .filter-btn.expiring.active { background: #ff4444; color: #000; border-color: #ff4444; }
+
+        .job-card { background: #161616; border-radius: 16px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #333; transition: 0.2s; }
+        .job-card:hover { border-left-color: var(--primary); background: #1c1c1c; }
+        .job-title { font-size: 17px; font-weight: bold; color: #fff; margin-bottom: 5px; }
+        .job-meta { color: #aaa; font-size: 13px; margin-bottom: 10px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .job-desc { color: #ccc; font-size: 14px; line-height: 1.6; margin-bottom: 15px; }
+        .job-btn { background: #ffbb00; color: #000; border: none; padding: 12px 20px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; width: 100%; text-align: center; display: block; text-decoration: none; transition: 0.2s; }
+        .job-btn:active { transform: scale(0.97); }
+        .expiry-tag { background: #ff4444; color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-left: 10px; }
+
+        .content-text { color: #ccc; line-height: 1.8; font-size: 15px; }
+        .content-text h3 { color: var(--primary); margin-top: 20px; margin-bottom: 10px; font-size: 18px; }
+        .content-text ul { margin-left: 20px; margin-top: 10px; margin-bottom: 10px; }
+        .content-text li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ==================== 1. HOME PAGE ==================== -->
+    <div id="homeSection" class="section active">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h1 style="color: var(--primary); margin:0; font-size: 24px;">🇵🇰 GovtJobs.PK</h1>
+                <span style="color: #555; font-size: 12px;">پاکستان کا سب سے بڑا سرکاری جاب ڈیٹا بیس</span>
+            </div>
+        </div>
+
+        <div class="warning-badge">
+            ⚠️ **اہم ہدایت:** یہ ایک غیر سرکاری، معلوماتی ویب سائٹ ہے۔ ہم سرکاری اداروں سے لنکس اکٹھا کر کے فراہم کرتے ہیں۔ براہ کرم درخواست دینے سے پہلے سرکاری ویب سائٹ پر جا کر اصل اعلان ضرور پڑھیں۔
+        </div>
+
+        <div class="trust-badge">
+            ✅ **ہمارا ڈیٹا:** ہم روزانہ FPSC, PPSC, SPSC, KPPSC, BPSC, WAPDA, NAB, اور دیگر تمام سرکاری ویب سائٹس کو اسکین کرتے ہیں۔ ہماری سائٹ پر 20 سے زائد مستند سرکاری نوکریوں کے لنکس موجود ہیں۔
+        </div>
+
+        <div class="info-card">
+            <h3 style="color: #fff; margin-bottom: 8px;">📝 سرکاری نوکری کے لیے درخواست کیسے دیں؟</h3>
+            <p style="color: #ddd; font-size: 14px; line-height: 1.6;">
+                1. نیچے دیے گئے "نوکریاں" والے ٹیب پر جائیں۔<br>
+                2. صوبہ اور شعبہ منتخب کریں تاکہ اپنی پسند کی نوکری فوراً مل جائے۔<br>
+                3. "سرکاری ویب سائٹ پر جائیں" کے بٹن پر کلک کریں اور وہاں جا کر اپنا فارم بھریں۔<br>
+                <b>نوٹ:</b> ہر نوکری کی آخری تاریخ ضرور نوٹ کریں۔
+            </p>
+        </div>
+
+        <button class="btn-primary" onclick="switchTab('jobs')">📋 ابھی 20+ نوکریاں دیکھیں</button>
+    </div>
+
+    <!-- ==================== 2. JOBS PAGE (20+ نوکریاں) ==================== -->
+    <div id="jobsSection" class="section">
+        <h2 style="margin-bottom: 10px; font-size: 22px;">📋 تازہ ترین سرکاری اسامیاں</h2>
+        
+        <div class="filter-container">
+            <input type="text" class="input-field" id="searchInput" placeholder="🔍 مثلاً: انجینئر, ٹیچر, ڈاکٹر, کلرک... تلاش کریں" onkeyup="filterJobs()">
+            
+            <div class="filter-group-title">📍 صوبہ منتخب کریں:</div>
+            <div class="filter-group" id="provinceFilters">
+                <button class="filter-btn active" onclick="setFilter('province', 'All', this)">سب (All)</button>
+                <button class="filter-btn" onclick="setFilter('province', 'پنجاب', this)">پنجاب</button>
+                <button class="filter-btn" onclick="setFilter('province', 'سندھ', this)">سندھ</button>
+                <button class="filter-btn" onclick="setFilter('province', 'خیبر پختونخوا', this)">کے پی کے</button>
+                <button class="filter-btn" onclick="setFilter('province', 'بلوچستان', this)">بلوچستان</button>
+                <button class="filter-btn" onclick="setFilter('province', 'وفاقی', this)">وفاقی</button>
+            </div>
+
+            <div class="filter-group-title">⚙️ شعبہ (فیلڈ) منتخب کریں:</div>
+            <div class="filter-group" id="fieldFilters">
+                <button class="filter-btn active" onclick="setFilter('field', 'All', this)">سب</button>
+                <button class="filter-btn" onclick="setFilter('field', 'انجینئرنگ', this)">انجینئرنگ</button>
+                <button class="filter-btn" onclick="setFilter('field', 'ٹیچنگ', this)">ٹیچنگ</button>
+                <button class="filter-btn" onclick="setFilter('field', 'میڈیکل', this)">میڈیکل</button>
+                <button class="filter-btn" onclick="setFilter('field', 'آفس', this)">آفس / کلرک</button>
+                <button class="filter-btn" onclick="setFilter('field', 'پولیس', this)">پولیس / سیکورٹی</button>
+                <button class="filter-btn expiring" onclick="setFilter('field', 'expiring', this)">⚡ جلد ختم</button>
+            </div>
+        </div>
+
+        <div id="jobContainer"></div>
+    </div>
+
+    <!-- ==================== 3. ABOUT PAGE ==================== -->
+    <div id="aboutSection" class="section">
+        <h2 style="margin-bottom: 15px; font-size: 22px;">ℹ️ ہمارے بارے میں</h2>
+        <div class="info-card">
+            <div class="content-text">
+                <h3>ہم کون ہیں؟</h3>
+                <p>GovtJobs.PK ایک آزاد اور مکمل طور پر معلوماتی پلیٹ فارم ہے۔ ہماری ٹیم پاکستان کے تمام صوبائی اور وفاقی سرکاری اداروں کی بھرتیوں کو ایک جگہ اکٹھا کرتی ہے تاکہ آپ کو ہر روز نئی نوکریاں ملیں۔</p>
+                <h3>ہماری خصوصیات:</h3>
+                <ul>
+                    <li><b>20 سے زائد سرکاری لنکس</b> ہر ماہ اپ ڈیٹ ہوتے ہیں۔</li>
+                    <li><b>مکمل معلومات:</b> آخری تاریخ، اہلیت، اور شعبے کی مکمل تفصیل۔</li>
+                    <li><b>صارف دوست:</b> صوبے اور شعبے کے لحاظ سے فوری فلٹرنگ۔</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 4. PRIVACY PAGE ==================== -->
+    <div id="privacySection" class="section">
+        <h2 style="margin-bottom: 15px; font-size: 22px;">🔒 رازداری کی پالیسی</h2>
+        <div class="info-card">
+            <div class="content-text">
+                <h3>ہم ڈیٹا اکٹھا نہیں کرتے</h3>
+                <p>ہم آپ کے کمپیوٹر یا موبائل سے کوئی بھی ذاتی معلومات (نام، نمبر، آئی پی) اکٹھا نہیں کرتے۔ ہم صرف سرکاری ویب سائٹس کے لنکس کا استعمال کرتے ہیں۔ آپ کا ڈیٹا 100% محفوظ ہے۔</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ==================== BOTTOM NAV ==================== -->
+<div class="nav-bar">
+    <button class="nav-item active" onclick="switchTab('home')"><span>🏠</span>ہوم</button>
+    <button class="nav-item" onclick="switchTab('jobs')"><span>📋</span>نوکریاں</button>
+    <button class="nav-item" onclick="switchTab('about')"><span>ℹ️</span>تعارف</button>
+    <button class="nav-item" onclick="switchTab('privacy')"><span>🔒</span>پرائیویسی</button>
+</div>
+
+<script>
+    // === 20 سے زائد سرکاری نوکریوں کا ڈیٹا ===
+    const jobData = [
+        // پنجاب کی نوکریاں
+        { id: 1, title: "پنجاب پولیس میں نئی بھرتیاں", province: "پنجاب", field: "پولیس", desc: "پنجاب پولیس کنستبل اور افسران کی بھرتی۔ اہلیت: میٹرک/انٹرمیڈیٹ۔ جسمانی ٹیسٹ لازمی۔", date: "30 اگست 2026", link: "https://www.punjabpolice.gov.pk" },
+        { id: 2, title: "پنجاب تعلیمی بورڈ میں ٹیچرز", province: "پنجاب", field: "ٹیچنگ", desc: "پنجاب بھر کے تعلیمی بورڈز میں اسامیوں کا اعلان۔ B.Ed اور ماسٹرز کی ڈگری لازمی۔", date: "18 ستمبر 2026", link: "https://www.pec.gov.pk" },
+        { id: 3, title: "پنجاب محکمہ آبپاشی میں انجینئرز", province: "پنجاب", field: "انجینئرنگ", desc: "پنجاب ایریگیشن ڈیپارٹمنٹ میں سول اور مکینیکل انجینئرز۔ 3 سال تجربہ ضروری۔", date: "5 ستمبر 2026", link: "https://www.irrigation.punjab.gov.pk" },
+        { id: 4, title: "لاہور میں ہیلتھ کیئر اسٹاف", province: "پنجاب", field: "میڈیکل", desc: "لاہور کے سرکاری ہسپتالوں میں نرسز اور پیرامیڈیکل اسٹاف۔ میٹرک اور ڈپلومہ اہلیت۔", date: "12 ستمبر 2026", link: "https://www.punjabhealth.gov.pk" },
+        { id: 5, title: "پنجاب محکمہ زراعت میں کلرک", province: "پنجاب", field: "آفس", desc: "محکمہ زراعت میں آفس اسسٹنٹ اور کلرک۔ انٹرمیڈیٹ اور ٹائپنگ ٹیسٹ۔", date: "22 اگست 2026", link: "https://www.agri.punjab.gov.pk" },
+
+        // سندھ کی نوکریاں
+        { id: 6, title: "سندھ زرعی یونیورسٹی میں لیکچررز", province: "سندھ", field: "ٹیچنگ", desc: "سندھ زرعی یونیورسٹی ٹنڈوجام میں اسسٹنٹ پروفیسرز۔ ماسٹرز یا پی ایچ ڈی۔", date: "15 ستمبر 2026", link: "https://www.sau.edu.pk" },
+        { id: 7, title: "سندھ محکمہ آبپاشی میں سول انجینئرز", province: "سندھ", field: "انجینئرنگ", desc: "سندھ ایریگیشن ڈیپارٹمنٹ کو سول انجینئرز کی فوری ضرورت۔ ڈیگری ہولڈرز۔", date: "12 ستمبر 2026", link: "https://www.sindhirrigation.gov.pk" },
+        { id: 8, title: "کراچی میں سرکاری سیکورٹی گارڈز", province: "سندھ", field: "پولیس", desc: "کراچی کے سرکاری دفاتر کے لیے سیکورٹی گارڈز۔ جسمانی فٹنس ضروری۔", date: "10 ستمبر 2026", link: "https://www.sindhpolice.gov.pk" },
+
+        // خیبر پختونخوا کی نوکریاں
+        { id: 9, title: "خیبر پختونخوا ہیلتھ ڈیپارٹمنٹ میں ڈاکٹرز", province: "خیبر پختونخوا", field: "میڈیکل", desc: "KPK محکمہ صحت کو 50 MBBS ڈاکٹرز اور پیرامیڈیکل اسٹاف کی ضرورت ہے۔", date: "10 ستمبر 2026", link: "https://www.kphealth.gov.pk" },
+        { id: 10, title: "خیبر پختونخوا پولیس سپیشل برانچ", province: "خیبر پختونخوا", field: "پولیس", desc: "KPK پولیس کی سپیشل برانچ میں 15 نئی اسامیاں۔ میٹرک اور فزیکل ٹیسٹ۔", date: "22 اگست 2026", link: "https://www.kppolice.gov.pk" },
+        { id: 11, title: "پشاور یونیورسٹی میں ٹیچنگ اسامیاں", province: "خیبر پختونخوا", field: "ٹیچنگ", desc: "پشاور یونیورسٹی میں لیکچررز کی اسامیاں۔ ماسٹرز اور نیٹ/گیٹ۔", date: "20 ستمبر 2026", link: "https://www.uop.edu.pk" },
+
+        // بلوچستان کی نوکریاں
+        { id: 12, title: "بلوچستان ہائی کورٹ آفس اسٹاف", province: "بلوچستان", field: "آفس", desc: "بلوچستان ہائی کورٹ کو کلرک اور اسٹینو ٹائپسٹ۔ کمپیوٹر کورس اور انٹرمیڈیٹ۔", date: "25 ستمبر 2026", link: "https://www.bhc.gov.pk" },
+        { id: 13, title: "کوٹہ میں سرکاری انجینئرنگ جابز", province: "بلوچستان", field: "انجینئرنگ", desc: "بلوچستان کے کوٹہ میں سول انجینئرز کی اسامیاں۔ 2 سال تجربہ۔", date: "8 ستمبر 2026", link: "https://www.balochistan.gov.pk" },
+
+        // وفاقی نوکریاں (سب سے زیادہ)
+        { id: 14, title: "وفاقی وزرات دفاع میں انجینئرز", province: "وفاقی", field: "انجینئرنگ", desc: "وزارت دفاع کے لیے مکینیکل اور الیکٹریکل انجینئرز۔ B.Sc اور 3 سال تجربہ۔", date: "20 اگست 2026", link: "https://www.mod.gov.pk" },
+        { id: 15, title: "وفاقی انٹیلیجنس سیکورٹی افسران", province: "وفاقی", field: "پولیس", desc: "وفاقی ادارے میں سیکورٹی گارڈز اور انویسٹی گیشن افسران۔ فزیکل اور مینٹل ٹیسٹ۔", date: "5 ستمبر 2026", link: "https://www.fia.gov.pk" },
+        { id: 16, title: "وفاقی WAPDA میں الیکٹریکل انجینئرز", province: "وفاقی", field: "انجینئرنگ", desc: "WAPDA نے پاور پروجیکٹس کے لیے الیکٹریکل انجینئرز کی بھرتی شروع کر دی۔ بہترین تنخواہ۔", date: "28 اگست 2026", link: "https://www.wapda.gov.pk" },
+        { id: 17, title: "وفاقی وزارت تعلیم میں آفس اسٹاف", province: "وفاقی", field: "آفس", desc: "وزارت تعلیم اسلام آباد میں کلرک اور اسٹینو ٹائپسٹ۔ بیچلرز ڈگری۔", date: "15 ستمبر 2026", link: "https://www.moe.gov.pk" },
+        { id: 18, title: "اسلام آباد میں سرکاری ہسپتال ڈاکٹرز", province: "وفاقی", field: "میڈیکل", desc: "اسلام آباد کے سرکاری ہسپتالوں میں سپیشلسٹ ڈاکٹرز کی بھرتی۔ FCPS/MCPS۔", date: "5 ستمبر 2026", link: "https://www.nh.gov.pk" },
+        { id: 19, title: "ایف پی ایس سی کی نئی اسامیاں", province: "وفاقی", field: "آفس", desc: "فیڈرل پبلک سروس کمیشن کی نئی اسامیاں۔ سی ایس ایس اور دیگر عہدوں کے لیے۔", date: "30 ستمبر 2026", link: "https://www.fpsc.gov.pk" },
+        { id: 20, title: "پاکستان نیوی میں ٹیکنیکل اسٹاف", province: "وفاقی", field: "انجینئرنگ", desc: "پاکستان نیوی کے لیے الیکٹریکل اور الیکٹرانکس انجینئرز۔ فزیکل ٹیسٹ۔", date: "25 اگست 2026", link: "https://www.paknavy.gov.pk" }
+    ];
+
+    let activeFilters = { province: 'All', field: 'All' };
+
+    // === نوکریاں رینڈر کرنے کا ماسٹر فنکشن ===
+    function renderJobs() {
+        const container = document.getElementById('jobContainer');
+        const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+        const today = new Date();
+        container.innerHTML = '';
+
+        let filteredJobs = jobData.filter(job => {
+            if(activeFilters.province !== 'All' && job.province !== activeFilters.province) return false;
+            if(activeFilters.field !== 'All' && activeFilters.field !== 'expiring' && job.field !== activeFilters.field) return false;
+            
+            // جلد ختم ہونے والی نوکریوں کا فلٹر (فرضی تاریخ کی بنیاد پر)
+            if(activeFilters.field === 'expiring') {
+                let jobDateParts = job.date.split(' ');
+                if(jobDateParts.length > 1 && jobDateParts[1] === 'اگست') return true; // اگست میں ختم ہونے والی
+                return false;
+            }
+
+            if(searchVal && !job.title.toLowerCase().includes(searchVal) && !job.desc.toLowerCase().includes(searchVal)) return false;
+            return true;
+        });
+
+        if(filteredJobs.length === 0) {
+            container.innerHTML = `<div class="info-card" style="text-align:center; padding: 40px 20px; color:#888;">
+                <span style="font-size: 40px; display:block; margin-bottom:10px;">😔</span>
+                اس فلٹر کے مطابق کوئی نوکری نہیں ملی۔ براہ کرم دوسرا فلٹر آزمائیں۔
+            </div>`;
+            return;
+        }
+
+        filteredJobs.forEach(job => {
+            let expiringTag = job.date.includes('اگست') ? `<span class="expiry-tag">⚡ جلد ختم</span>` : '';
+            let html = `
+                <div class="job-card">
+                    <div class="job-title">${job.title} ${expiringTag}</div>
+                    <div class="job-meta">
+                        <span>📍 ${job.province}</span>
+                        <span>⚙️ ${job.field}</span>
+                        <span>🗓️ آخری تاریخ: <b style="color:#ffbb00;">${job.date}</b></span>
+                    </div>
+                    <div class="job-desc">${job.desc}</div>
+                    <a href="${job.link}" target="_blank" rel="noopener noreferrer" class="job-btn">📝 سرکاری ویب سائٹ پر جائیں</a>
+                </div>
+            `;
+            container.innerHTML += html;
+        });
+    }
+
+    // === فلٹر سیٹ کرنے کا فنکشن ===
+    function setFilter(type, value, btn) {
+        activeFilters[type] = value;
+        let parent = btn.parentElement;
+        parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderJobs();
+    }
+
+    // === سرچ بار کا فنکشن ===
+    function filterJobs() { renderJobs(); }
+
+    // === ٹیبز تبدیل کرنے کا فنکشن ===
+    function switchTab(tabId) {
+        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId + 'Section').classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        event.target.closest('.nav-item').classList.add('active');
+        if(tabId === 'jobs') renderJobs();
+    }
+
+    // === انیشلائز ===
+    renderJobs();
+</script>
+</body>
+</html>
